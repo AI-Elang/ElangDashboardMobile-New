@@ -151,7 +151,7 @@ class _ComplaintDetailState extends State<ComplaintDetail> {
           decoration: const BoxDecoration(
             color: backgroundColor, // Use background color
             image: DecorationImage(
-              image: AssetImage('assets/LOGO.png'),
+              image: AssetImage('assets/LOGO3.png'),
               fit: BoxFit.cover,
               opacity: 0.08, // Adjusted opacity like complain.dart
               alignment: Alignment.bottomRight,

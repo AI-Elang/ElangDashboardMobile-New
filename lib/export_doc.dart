@@ -817,7 +817,7 @@ class _ExportDocState extends State<ExportDoc> {
                       color:
                           backgroundColor, // Use the defined background color
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08,
                         alignment: Alignment.bottomRight,
@@ -860,7 +860,7 @@ class _ExportDocState extends State<ExportDoc> {
                                           child: const CircleAvatar(
                                             radius: 30,
                                             backgroundImage:
-                                                AssetImage('assets/100.png'),
+                                                AssetImage('assets/LOGO3.png'),
                                             backgroundColor: Colors.transparent,
                                           ),
                                         ),

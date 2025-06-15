@@ -141,7 +141,7 @@ class _SwitchDseReportState extends State<SwitchDseReport> {
                     decoration: const BoxDecoration(
                       color: backgroundColor,
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08,
                         alignment: Alignment.bottomRight,
@@ -185,7 +185,7 @@ class _SwitchDseReportState extends State<SwitchDseReport> {
                                           child: const CircleAvatar(
                                             radius: 30,
                                             backgroundImage:
-                                                AssetImage('assets/100.png'),
+                                                AssetImage('assets/LOGO3.png'),
                                             backgroundColor: Colors.transparent,
                                           ),
                                         ),
@@ -708,45 +708,40 @@ class _SwitchDseReportState extends State<SwitchDseReport> {
     );
   }
 
-  // Helper method to build filter items (Styled like the screenshot)
+  // Helper method to build filter items (Modified for grayed-out style)
   Widget _buildFilterItem(String label, String value) {
-    // Define colors locally or ensure they are accessible from the build context
-    const backgroundColor =
-        Color(0xFFF8F9FA); // Use the defined off-white/light grey background
-    const textSecondaryColor =
-        Color(0xFF8D8D92); // Use the defined medium gray for the value
+    // Define colors locally or pass them if needed
+    const textLockedColor = Color(0xFF8D8D92); // Medium gray for locked text
+    const labelColor = Color(0xFF8D8D92); // Medium gray for label
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        // Change background color to match the screenshot's grey appearance
-        color: backgroundColor, // Use the light grey background
+        color: Colors.white, // Background for filter item
         borderRadius: BorderRadius.circular(8),
-        // Keep the subtle border as it's present in pt.dart's style
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: Colors.grey.shade300), // Subtle border
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 10,
-              color: Colors.grey.shade600, // Keep label color lighter
+              color: labelColor, // Gray label color
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 4), // Spacing between label and value
-          // Remove the Row and Icon, just display the value Text
+          const SizedBox(height: 2), // Spacing between label and value
           Text(
             value,
             style: const TextStyle(
               fontSize: 12, // Font size for value
-              // Change text color to grey to match the screenshot
-              color: textSecondaryColor, // Use the medium gray color
+              color: textLockedColor, // Gray text color for value
               fontWeight: FontWeight.w500,
             ),
-            overflow: TextOverflow.ellipsis, // Prevent long text overflow
+            softWrap: true, // Allow text to wrap
+            // Removed overflow: TextOverflow.ellipsis to allow full text display
           ),
         ],
       ),

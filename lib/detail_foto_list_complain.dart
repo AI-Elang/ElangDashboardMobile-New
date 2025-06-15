@@ -169,7 +169,7 @@ class _DetailFotoListComplainState extends State<DetailFotoListComplain> {
                     decoration: const BoxDecoration(
                       color: backgroundColor,
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08, // Adjusted opacity
                         alignment: Alignment.bottomRight,

@@ -337,7 +337,7 @@ class _DseAiState extends State<DseAi> {
                       topRight: Radius.circular(10),
                     ),
                     image: DecorationImage(
-                      image: AssetImage('assets/LOGO.png'),
+                      image: AssetImage('assets/LOGO3.png'),
                       fit: BoxFit.cover,
                       opacity: 0.3,
                       alignment: Alignment.bottomRight,
@@ -354,7 +354,8 @@ class _DseAiState extends State<DseAi> {
                               children: [
                                 const CircleAvatar(
                                   radius: 35,
-                                  backgroundImage: AssetImage('assets/100.png'),
+                                  backgroundImage:
+                                      AssetImage('assets/LOGO3.png'),
                                   backgroundColor: Colors.transparent,
                                 ),
                                 const SizedBox(width: 10),

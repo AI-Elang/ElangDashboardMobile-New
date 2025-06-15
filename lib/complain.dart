@@ -285,7 +285,7 @@ class _ComplainState extends State<Complain> with WidgetsBindingObserver {
                       color: backgroundColor, // Use background color
                       // Keep background image if desired, adjust opacity/alignment
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08, // Adjusted opacity
                         alignment: Alignment.bottomRight,
@@ -323,7 +323,7 @@ class _ComplainState extends State<Complain> with WidgetsBindingObserver {
                                     child: const CircleAvatar(
                                       radius: 30, // Adjusted size
                                       backgroundImage:
-                                          AssetImage('assets/100.png'),
+                                          AssetImage('assets/LOGO3.png'),
                                       backgroundColor: Colors.transparent,
                                     ),
                                   ),

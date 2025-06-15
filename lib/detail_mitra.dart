@@ -397,7 +397,7 @@ class _DetSitelateState extends State<DetailMitra>
                     decoration: const BoxDecoration(
                       color: backgroundColor,
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08,
                         alignment: Alignment.bottomRight,
@@ -607,7 +607,7 @@ class _DetSitelateState extends State<DetailMitra>
                                 fixedColumn: const {
                                   'key': 'KPI_NAME',
                                   'header': 'KPI NAME',
-                                  'width': 120.0
+                                  'width': 150.0
                                 },
                                 scrollableColumns: const [
                                   {'key': 'target', 'header': 'TARGET'},

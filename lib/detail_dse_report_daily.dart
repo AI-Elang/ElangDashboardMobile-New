@@ -134,7 +134,9 @@ class _DetailDseReportDailyState extends State<DetailDseReportDaily> {
       _buildStyledColumn('CHECKIN'),
       _buildStyledColumn('CHECKOUT'),
       _buildStyledColumn('DURATION'),
-      _buildStyledColumn('VISIT'),
+      _buildStyledColumn('TARGET PJP'),
+      _buildStyledColumn('ACTUAL PJP'),
+      _buildStyledColumn('PERCENTAGE'),
       _buildStyledColumn('SELLIN SP'),
       _buildStyledColumn('SELLIN VOU'),
       _buildStyledColumn('SELLIN SALMO'),
@@ -210,7 +212,7 @@ class _DetailDseReportDailyState extends State<DetailDseReportDaily> {
                     decoration: const BoxDecoration(
                       color: backgroundColor,
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08,
                         alignment: Alignment.bottomRight,
@@ -598,7 +600,11 @@ class _DetailDseReportDailyState extends State<DetailDseReportDaily> {
                                                                             '-'),
                                                                         _buildStyledDataCell(drd['duration'] ??
                                                                             '0'),
-                                                                        _buildStyledDataCell(drd['visit'] ??
+                                                                        _buildStyledDataCell(drd['target_pjp'] ??
+                                                                            '0'),
+                                                                        _buildStyledDataCell(drd['actual_pjp'] ??
+                                                                            '0'),
+                                                                        _buildStyledDataCell(drd['percentage'] ??
                                                                             '0'),
                                                                         _buildHighlightedDataCell(
                                                                             drd['sp'] ??

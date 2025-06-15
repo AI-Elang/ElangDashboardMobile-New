@@ -207,7 +207,7 @@ class _MCState extends State<MC> {
                     decoration: const BoxDecoration(
                       color: backgroundColor,
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08,
                         alignment: Alignment.bottomRight,
@@ -251,8 +251,8 @@ class _MCState extends State<MC> {
                                             ),
                                             child: const CircleAvatar(
                                               radius: 30,
-                                              backgroundImage:
-                                                  AssetImage('assets/100.png'),
+                                              backgroundImage: AssetImage(
+                                                  'assets/LOGO3.png'),
                                               backgroundColor:
                                                   Colors.transparent,
                                             ),
@@ -884,7 +884,8 @@ class _MCState extends State<MC> {
               color: textLockedColor, // Gray text color for value
               fontWeight: FontWeight.w500,
             ),
-            overflow: TextOverflow.ellipsis, // Prevent long text overflow
+            softWrap: true, // Allow text to wrap to the next line
+            // Removed overflow: TextOverflow.ellipsis to allow full text display
           ),
         ],
       ),

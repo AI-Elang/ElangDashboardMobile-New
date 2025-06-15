@@ -12,7 +12,6 @@ import 'package:elang_dashboard_new_ui/login.dart';
 import 'package:elang_dashboard_new_ui/auth_provider.dart';
 import 'package:elang_dashboard_new_ui/braind.dart';
 import 'package:elang_dashboard_new_ui/export_doc.dart';
-import 'package:elang_dashboard_new_ui/chat_feature_new.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,8 +19,8 @@ import 'package:photo_view/photo_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:http/http.dart' as http;
 
 import 'dart:convert';
 import 'dart:async';
@@ -1433,7 +1432,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                       decoration: const BoxDecoration(
                         color: backgroundColor,
                         image: DecorationImage(
-                          image: AssetImage('assets/LOGO.png'),
+                          image: AssetImage('assets/LOGO3.png'),
                           fit: BoxFit.cover,
                           opacity: 0.08,
                           alignment: Alignment.bottomRight,
@@ -1476,8 +1475,8 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                                             ),
                                             child: const CircleAvatar(
                                               radius: 30,
-                                              backgroundImage:
-                                                  AssetImage('assets/100.png'),
+                                              backgroundImage: AssetImage(
+                                                  'assets/LOGO3.png'),
                                               backgroundColor:
                                                   Colors.transparent,
                                             ),
@@ -2190,7 +2189,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                                             // RTV Table
                                             ? Padding(
                                                 padding:
-                                                    const EdgeInsets.all(4.0),
+                                                    const EdgeInsets.all(8.0),
                                                 child: _buildRTVTableCard(
                                                     'RTV (Last Update: $lastUpdate)'),
                                               )
@@ -2624,13 +2623,13 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                                                     height: 180.0,
                                                     enlargeCenterPage: true,
                                                     autoPlay: true,
+                                                    autoPlayAnimationDuration:
+                                                        const Duration(
+                                                            milliseconds: 800),
                                                     aspectRatio: 16 / 9,
                                                     autoPlayCurve:
                                                         Curves.fastOutSlowIn,
                                                     enableInfiniteScroll: true,
-                                                    autoPlayAnimationDuration:
-                                                        const Duration(
-                                                            milliseconds: 800),
                                                     viewportFraction: 0.8,
                                                     onPageChanged:
                                                         (index, reason) {
@@ -2685,6 +2684,8 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                                 ),
                               ),
 
+                              const SizedBox(height: 16),
+
                               // Additional Menu buttons section
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -2717,6 +2718,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                                           );
                                         },
                                       ),
+
                                       // BRAIND button
                                       _buildMenuButton(
                                         FontAwesomeIcons.brain, // Example icon
@@ -2732,6 +2734,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                                           );
                                         },
                                       ),
+
                                       // PAID PRO button
                                       _buildMenuButton(
                                         FontAwesomeIcons
@@ -2740,13 +2743,22 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                                         primaryColor,
                                         _showMaintenanceDialog,
                                       ),
-                                      // DAILY SF button
+
+                                      // // DAILY SF button
+                                      // _buildMenuButton(
+                                      //   FontAwesomeIcons
+                                      //       .calendarDay, // Example icon
+                                      //   'DAILY SF',
+                                      //   primaryColor,
+                                      //   _showMaintenanceDialog,
+                                      // ),
+
+                                      // LOGOUT button
                                       _buildMenuButton(
-                                        FontAwesomeIcons
-                                            .calendarDay, // Example icon
-                                        'DAILY SF',
-                                        primaryColor,
-                                        _showMaintenanceDialog,
+                                        FontAwesomeIcons.rightFromBracket,
+                                        'LOGOUT',
+                                        Colors.redAccent.shade200,
+                                        _handleLogout,
                                       ),
                                     ],
                                   ),
@@ -2951,21 +2963,21 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                                             },
                                           ),
 
-                                          // Chat button
-                                          _buildMenuButton(
-                                            FontAwesomeIcons.starOfLife,
-                                            'ASK ME',
-                                            primaryColor,
-                                            () {
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const ChatWelcomePage(),
-                                                ),
-                                              );
-                                            },
-                                          ),
+                                          // // Chat button
+                                          // _buildMenuButton(
+                                          //   FontAwesomeIcons.starOfLife,
+                                          //   'ASK ME',
+                                          //   primaryColor,
+                                          //   () {
+                                          //     Navigator.pushReplacement(
+                                          //       context,
+                                          //       MaterialPageRoute(
+                                          //         builder: (context) =>
+                                          //             const ChatWelcomePage(),
+                                          //       ),
+                                          //     );
+                                          //   },
+                                          // ),
 
                                           // WhatsApp button
                                           _buildMenuButton(
@@ -2977,13 +2989,13 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                                                 whatsappUrl), // Updated onTap
                                           ),
 
-                                          // Logout button
-                                          _buildMenuButton(
-                                            FontAwesomeIcons.rightFromBracket,
-                                            'LOGOUT',
-                                            Colors.redAccent.shade200,
-                                            _handleLogout,
-                                          ),
+                                          // // Logout button
+                                          // _buildMenuButton(
+                                          //   FontAwesomeIcons.rightFromBracket,
+                                          //   'LOGOUT',
+                                          //   Colors.redAccent.shade200,
+                                          //   _handleLogout,
+                                          // ),
                                         ],
                                       ),
                                     ],
@@ -3048,88 +3060,116 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
       Function(String) onChanged,
       List<String> items,
       bool isLoading, // Add isLoading parameter
-      {String? hint} // Add optional hint parameter
+      {String? hintText} // Optional custom hint text
       ) {
-    // Check if dropdown should be disabled (locked or loading)
     final bool isDisabled = isLocked || isLoading;
-    // Use hint if value is null and hint is provided
     final String? displayValue = value;
-    final bool showHint = displayValue == null && hint != null;
+
+    // Define colors (could be from theme or constants)
+    final Color enabledBorderColor = Colors.grey.shade300;
+    final Color disabledBorderColor = Colors.grey.shade200;
+    const Color enabledTextColor = Color(0xFF2D3142); // From your theme
+    final Color disabledTextColor = Colors.grey.shade500;
+    final Color labelTextColor = Colors.grey.shade600;
+    final Color hintTextColorLocal = Colors.grey.shade500;
+    const Color primaryThemeColor = Color(0xFF6A62B7); // From your theme
+
+    Widget? hintWidget;
+    if (displayValue == null) {
+      String actualHintText = hintText ?? "Pilih $label";
+      hintWidget = Text(
+        actualHintText,
+        style: TextStyle(
+          fontSize: 11, // Compact hint text
+          color: isDisabled
+              ? disabledTextColor.withOpacity(0.7)
+              : hintTextColorLocal,
+          fontWeight: FontWeight.w500,
+        ),
+        overflow: TextOverflow.ellipsis,
+      );
+    }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 10.0, vertical: 4.0), // Reduced vertical padding
       decoration: BoxDecoration(
-        color: isDisabled
-            ? Colors.grey.shade100 // Use a grey background when disabled
-            : Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade300),
+        color: isDisabled ? Colors.grey.shade100 : Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: isDisabled ? disabledBorderColor : enabledBorderColor,
+          width: 1.0,
+        ),
+        boxShadow: [
+          if (!isDisabled)
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.08), // Softer shadow
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Important for column height
         children: [
           Text(
             label,
             style: TextStyle(
-              fontSize: 10,
-              color: isDisabled
-                  ? Colors.grey.shade400 // Dimmer text color when disabled
-                  : Colors.grey.shade600,
+              fontSize: 9, // Smaller label
               fontWeight: FontWeight.w500,
+              color: isDisabled ? disabledTextColor : labelTextColor,
             ),
           ),
-          const SizedBox(height: 4),
+          // SizedBox(height: 2) removed for compactness, relying on DropdownButton's internal padding
           DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              value: displayValue, // Use displayValue which can be null
-              hint: showHint
-                  ? Text(
-                      // Show hint text if needed
-                      hint,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: isDisabled
-                            ? Colors.grey.shade400
-                            : Colors.grey.shade700,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  : null,
-              isDense: true,
+              value: displayValue,
+              hint: hintWidget,
+              isDense: true, // Makes the dropdown vertically compact
               isExpanded: true,
-              icon: isLoading // Show loading indicator if loading
-                  ? Container(
-                      alignment: Alignment.centerRight,
-                      width: 16,
-                      height: 16,
-                      child: const CircularProgressIndicator(strokeWidth: 2),
+              style: TextStyle(
+                // Style for the selected item text
+                fontSize: 11, // Compact item text
+                color: isDisabled ? disabledTextColor : enabledTextColor,
+                fontWeight: FontWeight.w500,
+              ),
+              icon: isLoading
+                  ? const SizedBox(
+                      width: 14, // Smaller loading indicator
+                      height: 14,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1.5,
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(primaryThemeColor),
+                      ),
                     )
                   : Icon(
-                      Icons.arrow_drop_down,
-                      color: isDisabled
-                          ? Colors.grey.shade400
-                          : Colors.grey.shade700, // Dimmer icon
+                      Icons.keyboard_arrow_down_rounded, // Modern icon
+                      size: 20, // Adjust icon size
+                      color:
+                          isDisabled ? disabledTextColor : Colors.grey.shade700,
                     ),
               onChanged: isDisabled
                   ? null
-                  : (newValue) => onChanged(newValue!), // Disable onChanged
+                  : (newValue) {
+                      if (newValue != null) {
+                        onChanged(newValue);
+                      }
+                    },
               items: items.map<DropdownMenuItem<String>>((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
                   child: Text(
                     item,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDisabled
-                          ? Colors.grey.shade400 // Dimmer item text color
-                          : const Color(0xFF2D3142),
-                      fontWeight: FontWeight.w500,
-                    ),
                     overflow: TextOverflow.ellipsis,
+                    // Item text style is inherited from DropdownButton's style
                   ),
                 );
               }).toList(),
+              dropdownColor: Colors.white, // Background of the dropdown menu
+              elevation: 2, // Shadow for the dropdown menu
+              borderRadius: BorderRadius.circular(8.0),
             ),
           ),
         ],
@@ -3283,7 +3323,6 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
           textAlign: isNumeric ? TextAlign.center : TextAlign.left,
           overflow: TextOverflow.visible, // Changed from ellipsis to visible
           softWrap: true, // Enable text wrapping
-          maxLines: 2, // Allow up to 2 lines for wrapped text
         ),
       ),
     );
@@ -3320,7 +3359,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
       margin: const EdgeInsets.symmetric(horizontal: 2),
       child: Container(
         padding: const EdgeInsets.all(10),
-        width: mediaQueryWidth * 0.875,
+        width: mediaQueryWidth * 0.865,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: Colors.white,
@@ -3516,7 +3555,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
       margin: const EdgeInsets.symmetric(horizontal: 2),
       child: Container(
         padding: const EdgeInsets.all(10),
-        width: mediaQueryWidth * 0.875,
+        width: mediaQueryWidth * 0.865,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: Colors.white,
@@ -3541,7 +3580,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      '$title (Last Update: $lastUpdate)', // Include lastUpdate in title
+                      title, // Include lastUpdate in title
                       style: const TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
@@ -3627,7 +3666,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
                                             0.75,
                                             true),
                                         _buildTableCell(
-                                          row['ACHV'] ?? 'No Data',
+                                          row['ACHIEVEMENT'] ?? 'No Data',
                                           0.75,
                                           true,
                                         ),
@@ -3665,7 +3704,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Container(
         padding: const EdgeInsets.all(10),
-        width: mediaQueryWidth * 0.875,
+        width: mediaQueryWidth * 0.865,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: Colors.white,
@@ -3832,7 +3871,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Container(
         padding: const EdgeInsets.all(10),
-        width: mediaQueryWidth * 0.875,
+        width: mediaQueryWidth * 0.865,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: Colors.white,
@@ -4004,7 +4043,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
       margin: const EdgeInsets.symmetric(horizontal: 2),
       child: Container(
         padding: const EdgeInsets.all(10),
-        width: mediaQueryWidth * 0.875,
+        width: mediaQueryWidth * 0.865,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: Colors.white,
@@ -4200,7 +4239,7 @@ class _HomepageState extends State<Homepage> with AutoLogoutMixin {
       margin: const EdgeInsets.symmetric(horizontal: 2),
       child: Container(
         padding: const EdgeInsets.all(10),
-        width: mediaQueryWidth * 0.875,
+        width: mediaQueryWidth * 0.865,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: Colors.white,

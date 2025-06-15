@@ -2,54 +2,27 @@ import 'package:elang_dashboard_new_ui/services/fcm_service.dart';
 import 'package:elang_dashboard_new_ui/auth_provider.dart';
 import 'package:elang_dashboard_new_ui/login.dart';
 import 'package:elang_dashboard_new_ui/home_page.dart';
-import 'package:elang_dashboard_new_ui/chat_feature_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final authProvider = AuthProvider();
   final packageInfo = await PackageInfo.fromPlatform();
-  final appDocumentDir = await getApplicationDocumentsDirectory();
 
   await authProvider.initializeAuth();
   await FCMService.initialize();
   await dotenv.load(fileName: '.env');
-  await Hive.initFlutter(appDocumentDir.path);
-
-  // Register adapters BEFORE any Hive operations
-  if (!Hive.isAdapterRegistered(ChatMessageAdapter().typeId)) {
-    Hive.registerAdapter(ChatMessageAdapter());
-  }
-  if (!Hive.isAdapterRegistered(ChatHistoryItemAdapter().typeId)) {
-    Hive.registerAdapter(ChatHistoryItemAdapter());
-  }
-  if (!Hive.isAdapterRegistered(MessageTypeAdapter().typeId)) {
-    Hive.registerAdapter(MessageTypeAdapter());
-  }
-  if (!Hive.isAdapterRegistered(AiFlowAdapter().typeId)) {
-    Hive.registerAdapter(AiFlowAdapter());
-  }
-
-  // Create services and controller AFTER adapter registration
-  final chatPersistenceService = ChatPersistenceService();
-  final chatController = ChatController(chatPersistenceService);
-
-  // Load initial history AFTER everything is set up
-  await chatController.loadInitialData();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: authProvider),
         Provider<String>.value(value: packageInfo.version),
-        ChangeNotifierProvider.value(value: chatController),
       ],
       child: const MyApp(),
     ),

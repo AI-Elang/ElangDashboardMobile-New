@@ -50,20 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAdZo6KFhlU6Ks5ntvC2bDvpLGFs4aLUBc',
-    appId: '1:540416463777:android:685baaffe86712477fb1e0',
-    messagingSenderId: '540416463777',
-    projectId: 'elang-notification-updates',
-    storageBucket: 'elang-notification-updates.firebasestorage.app',
+    apiKey: 'AIzaSyCBrV5LeTqDBMWfqaruSNBSiqRsrnC1rH4',
+    appId: '1:895873343776:android:7f228330adcdfa323b7745',
+    messagingSenderId: '895873343776',
+    projectId: 'elang-new-notification-u-15b10',
+    storageBucket: 'elang-new-notification-u-15b10.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBjgWkegRK-8bQsJLxrFXEDT5BNQFDH_AQ',
-    appId: '1:540416463777:ios:63ae467fc26bb8677fb1e0',
-    messagingSenderId: '540416463777',
-    projectId: 'elang-notification-updates',
-    storageBucket: 'elang-notification-updates.firebasestorage.app',
-    iosBundleId: 'com.indosat.elangv2Jdk19',
+    apiKey: 'AIzaSyAW_SAcG76dvsSqjlwCNY8yNCKnbeY2nSw',
+    appId: '1:895873343776:ios:2d4b3ace169e11c73b7745',
+    messagingSenderId: '895873343776',
+    projectId: 'elang-new-notification-u-15b10',
+    storageBucket: 'elang-new-notification-u-15b10.firebasestorage.app',
+    iosBundleId: 'com.indosat.elangDashboardNewUiJdk19',
   );
-
 }

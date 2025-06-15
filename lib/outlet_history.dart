@@ -176,7 +176,7 @@ class _OutletHistoryState extends State<OutletHistory> {
                       color: backgroundColor, // Use defined background color
                       // Removed BorderRadius here as it's part of the overall page background
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08, // Adjusted opacity
                         alignment: Alignment.bottomRight,

@@ -476,7 +476,7 @@ class _BraindState extends State<Braind> {
                       color:
                           backgroundColor, // Use the defined background color
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08, // Softer opacity
                         alignment: Alignment.bottomRight,
@@ -518,7 +518,7 @@ class _BraindState extends State<Braind> {
                                           child: const CircleAvatar(
                                             radius: 30,
                                             backgroundImage:
-                                                AssetImage('assets/100.png'),
+                                                AssetImage('assets/LOGO3.png'),
                                             backgroundColor: Colors.transparent,
                                           ),
                                         ),
@@ -993,79 +993,150 @@ class _BraindState extends State<Braind> {
   // Helper method to build styled dropdowns (adapted from dse.dart)
   Widget _buildFilterDropdown(
     String label,
-    String value,
-    bool
-        isLocked, // Changed from isDisabled to isLocked to match dse.dart param name
-    Function(String) onChanged,
+    String? value, // Changed to String?
+    bool isLocked,
+    Function(String)
+        onChanged, // Remains Function(String) as "Pilih X" are items
     List<String> items,
   ) {
-    const textPrimaryColor =
-        Color(0xFF2D3142); // Defined in build, can be passed or defined locally
-    // Determine if dropdown should be disabled based on lock status or overall loading state
-    final bool isDisabled = isLocked || _isLoading || _isLoadingTable;
+    final bool isDisabled =
+        isLocked || _isLoading; // _isLoading is from _DseState
+    final String? displayValue = value;
 
-    // Ensure items list is not empty and value is present, or default to first if possible
-    String? currentValue = value;
-    if (items.isEmpty) {
-      items = ['N/A']; // Provide a default non-selectable item if empty
-      currentValue = 'N/A';
-      // isDisabled = true; // Already handled by isLocked or _isLoading
-    } else if (!items.contains(value)) {
-      currentValue = items.isNotEmpty
-          ? items.first
-          : 'N/A'; // Default to first item or N/A
-      if (items.isEmpty) {
-        // isDisabled = true; // Already handled
-      }
-    }
-    if (items.isEmpty || (items.length == 1 && items.first == 'N/A')) {
-      // isDisabled = true; // Ensure disabled if effectively no options
-    }
+    // Define colors (matching dse.dart style)
+    final Color enabledBorderColor = Colors.grey.shade300;
+    final Color disabledBorderColor = Colors.grey.shade200;
+    const Color enabledTextColor = Color(0xFF2D3142); // textPrimaryColor
+    final Color disabledTextColor = Colors.grey.shade500;
+    final Color labelTextColor = Colors.grey.shade600;
+    final Color hintTextColorLocal = Colors.grey.shade500;
+    const Color primaryThemeColor = Color(0xFF6A62B7); // primaryColor
+
+    Widget hintForDropdownButton = Text(
+      "Pilih $label", // Default hint text
+      style: TextStyle(
+        fontSize: 11,
+        color: isDisabled
+            ? disabledTextColor.withOpacity(0.7)
+            : hintTextColorLocal,
+        fontWeight: FontWeight.w500,
+      ),
+      softWrap: true, // Ensure hint text wraps
+      // Removed overflow: TextOverflow.ellipsis to allow wrapping
+    );
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 10.0, vertical: 4.0), // Reduced vertical padding
       decoration: BoxDecoration(
-        color: isDisabled ? Colors.grey.shade100 : Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade300),
+        color: isDisabled
+            ? Colors.grey.shade100
+            : Colors.white, // cardColor is Colors.white
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: isDisabled ? disabledBorderColor : enabledBorderColor,
+          width: 1.0,
+        ),
+        boxShadow: [
+          if (!isDisabled)
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.08), // Softer shadow
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Important for column height
         children: [
           Text(
             label,
             style: TextStyle(
-              fontSize: 10,
-              color: isDisabled ? Colors.grey.shade400 : Colors.grey.shade600,
+              fontSize: 9, // Smaller label
               fontWeight: FontWeight.w500,
+              color: isDisabled ? disabledTextColor : labelTextColor,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 5.0), // Added spacing
           DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              value: currentValue,
-              isDense: true,
-              isExpanded: true,
-              icon: Icon(
-                Icons.arrow_drop_down,
-                color: isDisabled ? Colors.grey.shade400 : Colors.grey.shade700,
+              value:
+                  displayValue, // This will be "Pilih X" if that's the current state value
+              hint: hintForDropdownButton, // Shown if displayValue is null
+              isDense: true, // Makes the dropdown vertically compact
+              isExpanded:
+                  true, // Allows the dropdown to expand and text to wrap
+              style: TextStyle(
+                // Style for the selected item text
+                fontSize: 11, // Compact item text
+                color: isDisabled ? disabledTextColor : enabledTextColor,
+                fontWeight: FontWeight.w500,
               ),
-              onChanged: isDisabled ? null : (newValue) => onChanged(newValue!),
+              icon:
+                  _isLoading // Use _isLoading from _DseState for the icon state
+                      ? const SizedBox(
+                          width: 14, // Smaller loading indicator
+                          height: 14,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1.5,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                primaryThemeColor),
+                          ),
+                        )
+                      : Icon(
+                          Icons.keyboard_arrow_down_rounded, // Modern icon
+                          size: 20, // Adjust icon size
+                          color: isDisabled
+                              ? disabledTextColor
+                              : Colors.grey.shade700,
+                        ),
+              onChanged: isDisabled
+                  ? null
+                  : (newValue) {
+                      if (newValue != null) {
+                        onChanged(newValue);
+                      }
+                    },
               items: items.map<DropdownMenuItem<String>>((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
-                  child: Text(
-                    item,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color:
-                          isDisabled ? Colors.grey.shade400 : textPrimaryColor,
-                      fontWeight: FontWeight.w500,
+                  child: Padding(
+                    // Added padding for internal spacing
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 2.0), // Small horizontal padding
+                    child: Text(
+                      item,
+                      softWrap: true, // Ensure item text wraps
+                      // Removed overflow property to allow full text display
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
                 );
               }).toList(),
+              selectedItemBuilder: (BuildContext context) {
+                // Ensures selected item also wraps
+                return items.map<Widget>((String item) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Text(
+                      item,
+                      softWrap: true, // Ensure selected item text wraps
+                      style: TextStyle(
+                        // Explicitly define style for selected item to ensure consistency
+                        fontSize: 11,
+                        color:
+                            isDisabled ? disabledTextColor : enabledTextColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      // Removed overflow property to allow full text display
+                    ),
+                  );
+                }).toList();
+              },
+              dropdownColor:
+                  Colors.white, // Background of the dropdown menu (cardColor)
+              elevation: 2, // Shadow for the dropdown menu
+              borderRadius: BorderRadius.circular(8.0),
             ),
           ),
         ],

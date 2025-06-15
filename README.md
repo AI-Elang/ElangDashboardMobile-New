@@ -7,4 +7,4 @@ Use jdk_19 java and newer flutter version.
 2. Run flutter pub get to update, upgrade and install the dependency and all source.
 3. Rename file `.env.example` to `.env` and paste the API URL in file `.env`.
 4. Debug or Run this project in main.dart
-## Update 26/05/2025
+## Update 16/06/2025

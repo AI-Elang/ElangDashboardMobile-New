@@ -1,3 +1,4 @@
+import 'package:elang_dashboard_new_ui/outlet_checkin.dart';
 import 'package:elang_dashboard_new_ui/pt.dart';
 import 'package:elang_dashboard_new_ui/home_page.dart';
 import 'package:elang_dashboard_new_ui/auth_provider.dart';
@@ -109,6 +110,7 @@ class _OutletState extends State<Outlet> {
   }
 
   bool _isLoadingTable = false;
+  bool _isLoading = false; // Track overall loading state
   bool _isFiltersCollapsed =
       true; // Add a state variable to track if filters are collapsed
 
@@ -497,7 +499,7 @@ class _OutletState extends State<Outlet> {
                     decoration: const BoxDecoration(
                       color: backgroundColor, // Use defined background color
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08, // Adjusted opacity
                         alignment: Alignment.bottomRight,
@@ -537,7 +539,7 @@ class _OutletState extends State<Outlet> {
                                         child: const CircleAvatar(
                                           radius: 30, // Adjusted size
                                           backgroundImage:
-                                              AssetImage('assets/100.png'),
+                                              AssetImage('assets/LOGO3.png'),
                                           backgroundColor: Colors.transparent,
                                         ),
                                       ),
@@ -688,8 +690,14 @@ class _OutletState extends State<Outlet> {
                                                           _isDropdownLocked(1),
                                                           (value) {
                                                             setState(() {
-                                                              _selectedDropdown1 =
-                                                                  value;
+                                                              // Make async
+                                                              if (_isLoading) {
+                                                                return; // Add check
+                                                              }
+                                                              setState(() {
+                                                                _selectedDropdown1 =
+                                                                    value;
+                                                              });
                                                               final authProvider =
                                                                   Provider.of<
                                                                           AuthProvider>(
@@ -713,7 +721,12 @@ class _OutletState extends State<Outlet> {
                                                           "Region",
                                                           _selectedDropdown2!,
                                                           _isDropdownLocked(2),
-                                                          (value) {
+                                                          (value) async {
+                                                            // Make async
+                                                            if (_isLoading) {
+                                                              return; // Add check
+                                                            }
+
                                                             setState(() {
                                                               _selectedDropdown2 =
                                                                   value;
@@ -726,12 +739,20 @@ class _OutletState extends State<Outlet> {
                                                               _subAreas.clear();
                                                               _mcData.clear();
 
-                                                              final authProvider =
-                                                                  Provider.of<
-                                                                          AuthProvider>(
-                                                                      context,
-                                                                      listen:
-                                                                          false);
+                                                              // Set loading here before async operations
+                                                              _isLoading = true;
+                                                              _isLoadingTable =
+                                                                  true;
+                                                            });
+
+                                                            final authProvider =
+                                                                Provider.of<
+                                                                        AuthProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false);
+
+                                                            try {
                                                               if (value ==
                                                                   'Pilih Region') {
                                                                 fetchDashboardOutlet(
@@ -753,7 +774,17 @@ class _OutletState extends State<Outlet> {
                                                                     token: authProvider
                                                                         .token);
                                                               }
-                                                            });
+                                                            } finally {
+                                                              // Reset loading state regardless of success/failure
+                                                              // Note: fetchDashboardDSEReport also sets these, potentially redundant but safe
+                                                              if (mounted) {
+                                                                setState(() {
+                                                                  _isLoading =
+                                                                      false;
+                                                                  // _isLoadingTable is handled by fetchDashboardDSEReport
+                                                                });
+                                                              }
+                                                            }
                                                           },
                                                           _regions
                                                               .map((r) =>
@@ -775,7 +806,12 @@ class _OutletState extends State<Outlet> {
                                                           "Area",
                                                           _selectedDropdown3!,
                                                           _isDropdownLocked(3),
-                                                          (value) {
+                                                          (value) async {
+                                                            // Make async
+                                                            if (_isLoading) {
+                                                              return; // Add check
+                                                            }
+
                                                             setState(() {
                                                               _selectedDropdown3 =
                                                                   value;
@@ -783,13 +819,19 @@ class _OutletState extends State<Outlet> {
                                                                   'Pilih Branch';
                                                               _subAreas.clear();
                                                               _mcData.clear();
+                                                              _isLoading = true;
+                                                              _isLoadingTable =
+                                                                  true;
+                                                            });
 
-                                                              final authProvider =
-                                                                  Provider.of<
-                                                                          AuthProvider>(
-                                                                      context,
-                                                                      listen:
-                                                                          false);
+                                                            final authProvider =
+                                                                Provider.of<
+                                                                        AuthProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false);
+
+                                                            try {
                                                               if (value ==
                                                                   'Pilih Area') {
                                                                 fetchDashboardOutlet(
@@ -819,7 +861,16 @@ class _OutletState extends State<Outlet> {
                                                                     token: authProvider
                                                                         .token);
                                                               }
-                                                            });
+                                                            } finally {
+                                                              // Reset loading state regardless of success/failure
+                                                              if (mounted) {
+                                                                setState(() {
+                                                                  _isLoading =
+                                                                      false;
+                                                                  // _isLoadingTable is handled by fetchDashboardDSEReport
+                                                                });
+                                                              }
+                                                            }
                                                           },
                                                           _subRegions
                                                               .map((sr) =>
@@ -836,18 +887,29 @@ class _OutletState extends State<Outlet> {
                                                           "Branch",
                                                           _selectedDropdown4!,
                                                           _isDropdownLocked(4),
-                                                          (value) {
+                                                          (value) async {
+                                                            // Make async
+                                                            if (_isLoading) {
+                                                              return; // Add check
+                                                            }
+
                                                             setState(() {
                                                               _selectedDropdown4 =
                                                                   value;
                                                               _mcData.clear();
+                                                              _isLoading = true;
+                                                              _isLoadingTable =
+                                                                  true;
+                                                            });
 
-                                                              final authProvider =
-                                                                  Provider.of<
-                                                                          AuthProvider>(
-                                                                      context,
-                                                                      listen:
-                                                                          false);
+                                                            final authProvider =
+                                                                Provider.of<
+                                                                        AuthProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false);
+
+                                                            try {
                                                               if (value ==
                                                                   'Pilih Branch') {
                                                                 fetchDashboardOutlet(
@@ -870,7 +932,14 @@ class _OutletState extends State<Outlet> {
                                                                     token: authProvider
                                                                         .token);
                                                               }
-                                                            });
+                                                            } finally {
+                                                              if (mounted) {
+                                                                setState(() {
+                                                                  _isLoading =
+                                                                      false;
+                                                                });
+                                                              }
+                                                            }
                                                           },
                                                           _subAreas
                                                               .map((a) =>
@@ -897,6 +966,41 @@ class _OutletState extends State<Outlet> {
                                     ],
                                   ),
                                 ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(
+                            height: 16), // Spacing before table header
+
+                        // Update Outlet Checking Button - remove parameters
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const OutletCheckin(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                'Outlet Check-in',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -1239,66 +1343,150 @@ class _OutletState extends State<Outlet> {
   // Helper method to build filter dropdowns (copied from dse_report style)
   Widget _buildFilterDropdown(
     String label,
-    String value,
+    String? value, // Changed to String?
     bool isLocked,
-    Function(String) onChanged,
+    Function(String)
+        onChanged, // Remains Function(String) as "Pilih X" are items
     List<String> items,
   ) {
-    // Define colors locally or pass them if needed
-    const textPrimaryColor = Color(0xFF2D3142);
+    final bool isDisabled =
+        isLocked || _isLoading; // _isLoading is from _DseState
+    final String? displayValue = value;
+
+    // Define colors (matching dse.dart style)
+    final Color enabledBorderColor = Colors.grey.shade300;
+    final Color disabledBorderColor = Colors.grey.shade200;
+    const Color enabledTextColor = Color(0xFF2D3142); // textPrimaryColor
+    final Color disabledTextColor = Colors.grey.shade500;
+    final Color labelTextColor = Colors.grey.shade600;
+    final Color hintTextColorLocal = Colors.grey.shade500;
+    const Color primaryThemeColor = Color(0xFF6A62B7); // primaryColor
+
+    Widget hintForDropdownButton = Text(
+      "Pilih $label", // Default hint text
+      style: TextStyle(
+        fontSize: 11,
+        color: isDisabled
+            ? disabledTextColor.withOpacity(0.7)
+            : hintTextColorLocal,
+        fontWeight: FontWeight.w500,
+      ),
+      softWrap: true, // Ensure hint text wraps
+      // Removed overflow: TextOverflow.ellipsis to allow wrapping
+    );
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 10.0, vertical: 4.0), // Reduced vertical padding
       decoration: BoxDecoration(
-        color: Colors.white, // Background for dropdown area
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade300), // Subtle border
+        color: isDisabled
+            ? Colors.grey.shade100
+            : Colors.white, // cardColor is Colors.white
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: isDisabled ? disabledBorderColor : enabledBorderColor,
+          width: 1.0,
+        ),
+        boxShadow: [
+          if (!isDisabled)
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.08), // Softer shadow
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Important for column height
         children: [
           Text(
             label,
             style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey.shade600, // Lighter color for label
+              fontSize: 9, // Smaller label
               fontWeight: FontWeight.w500,
+              color: isDisabled ? disabledTextColor : labelTextColor,
             ),
           ),
-          const SizedBox(height: 4), // Spacing between label and dropdown
+          const SizedBox(height: 5.0), // Added spacing
           DropdownButtonHideUnderline(
-            // Hides the default underline
             child: DropdownButton<String>(
-              value: value,
-              isDense: true, // Reduces vertical padding
-              isExpanded: true, // Makes dropdown take available width
-              icon: Icon(
-                Icons.arrow_drop_down, // Standard dropdown icon
-                color: isLocked
-                    ? Colors.grey.shade400
-                    : Colors.grey.shade700, // Icon color based on lock state
+              value:
+                  displayValue, // This will be "Pilih X" if that's the current state value
+              hint: hintForDropdownButton, // Shown if displayValue is null
+              isDense: true, // Makes the dropdown vertically compact
+              isExpanded:
+                  true, // Allows the dropdown to expand and text to wrap
+              style: TextStyle(
+                // Style for the selected item text
+                fontSize: 11, // Compact item text
+                color: isDisabled ? disabledTextColor : enabledTextColor,
+                fontWeight: FontWeight.w500,
               ),
-              onChanged: (_isLoadingTable || isLocked)
+              icon:
+                  _isLoading // Use _isLoading from _DseState for the icon state
+                      ? const SizedBox(
+                          width: 14, // Smaller loading indicator
+                          height: 14,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1.5,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                primaryThemeColor),
+                          ),
+                        )
+                      : Icon(
+                          Icons.keyboard_arrow_down_rounded, // Modern icon
+                          size: 20, // Adjust icon size
+                          color: isDisabled
+                              ? disabledTextColor
+                              : Colors.grey.shade700,
+                        ),
+              onChanged: isDisabled
                   ? null
-                  : (newValue) =>
-                      onChanged(newValue!), // Disable if loading or locked
+                  : (newValue) {
+                      if (newValue != null) {
+                        onChanged(newValue);
+                      }
+                    },
               items: items.map<DropdownMenuItem<String>>((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
-                  child: Text(
-                    item,
-                    style: TextStyle(
-                      fontSize: 12, // Font size for items
-                      color: (_isLoadingTable || isLocked)
-                          ? Colors.grey
-                          : textPrimaryColor, // Text color based on state
-                      fontWeight: FontWeight.w500,
+                  child: Padding(
+                    // Added padding for internal spacing
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 2.0), // Small horizontal padding
+                    child: Text(
+                      item,
+                      softWrap: true, // Ensure item text wraps
+                      // Removed overflow property to allow full text display
                     ),
-                    overflow:
-                        TextOverflow.ellipsis, // Prevent long text overflow
                   ),
                 );
               }).toList(),
+              selectedItemBuilder: (BuildContext context) {
+                // Ensures selected item also wraps
+                return items.map<Widget>((String item) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Text(
+                      item,
+                      softWrap: true, // Ensure selected item text wraps
+                      style: TextStyle(
+                        // Explicitly define style for selected item to ensure consistency
+                        fontSize: 11,
+                        color:
+                            isDisabled ? disabledTextColor : enabledTextColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      // Removed overflow property to allow full text display
+                    ),
+                  );
+                }).toList();
+              },
+              dropdownColor:
+                  Colors.white, // Background of the dropdown menu (cardColor)
+              elevation: 2, // Shadow for the dropdown menu
+              borderRadius: BorderRadius.circular(8.0),
             ),
           ),
         ],

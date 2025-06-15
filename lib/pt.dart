@@ -219,7 +219,7 @@ class _PTState extends State<PT> {
                     decoration: const BoxDecoration(
                       color: backgroundColor, // Use defined background color
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08, // Adjusted opacity
                         alignment: Alignment.bottomRight,
@@ -259,7 +259,7 @@ class _PTState extends State<PT> {
                                         child: const CircleAvatar(
                                           radius: 30, // Adjusted size
                                           backgroundImage:
-                                              AssetImage('assets/100.png'),
+                                              AssetImage('assets/LOGO3.png'),
                                           backgroundColor: Colors.transparent,
                                         ),
                                       ),
@@ -407,9 +407,6 @@ class _PTState extends State<PT> {
                                                             _buildFilterDropdown(
                                                           "Circle",
                                                           _selectedDropdown1,
-                                                          true, // Always locked
-                                                          (value) {}, // No action
-                                                          [_selectedDropdown1],
                                                         ),
                                                       ),
                                                       const SizedBox(width: 8),
@@ -420,12 +417,6 @@ class _PTState extends State<PT> {
                                                           "Region",
                                                           _selectedDropdown2 ??
                                                               'N/A',
-                                                          true, // Always locked
-                                                          (value) {}, // No action
-                                                          [
-                                                            _selectedDropdown2 ??
-                                                                'N/A'
-                                                          ],
                                                         ),
                                                       ),
                                                     ],
@@ -441,12 +432,6 @@ class _PTState extends State<PT> {
                                                           "Area",
                                                           _selectedDropdown3 ??
                                                               'N/A',
-                                                          true, // Always locked
-                                                          (value) {}, // No action
-                                                          [
-                                                            _selectedDropdown3 ??
-                                                                'N/A'
-                                                          ],
                                                         ),
                                                       ),
                                                       const SizedBox(width: 8),
@@ -457,12 +442,6 @@ class _PTState extends State<PT> {
                                                           "Branch",
                                                           _selectedDropdown4 ??
                                                               'N/A',
-                                                          true, // Always locked
-                                                          (value) {}, // No action
-                                                          [
-                                                            _selectedDropdown4 ??
-                                                                'N/A'
-                                                          ],
                                                         ),
                                                       ),
                                                     ],
@@ -810,21 +789,16 @@ class _PTState extends State<PT> {
     );
   }
 
-  // Helper method to build filter dropdowns (adapted from outlet.dart style)
-  Widget _buildFilterDropdown(
-    String label,
-    String value,
-    bool isLocked,
-    Function(String) onChanged,
-    List<String> items,
-  ) {
+  // Helper method to build filter items (Modified for grayed-out style)
+  Widget _buildFilterDropdown(String label, String value) {
     // Define colors locally or pass them if needed
-    const textPrimaryColor = Color(0xFF2D3142);
+    const textLockedColor = Color(0xFF8D8D92); // Medium gray for locked text
+    const labelColor = Color(0xFF8D8D92); // Medium gray for label
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white, // Background for dropdown area
+        color: Colors.white, // Background for filter item
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey.shade300), // Subtle border
       ),
@@ -833,47 +807,22 @@ class _PTState extends State<PT> {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 10,
-              color: Colors.grey.shade600, // Lighter color for label
+              color: labelColor, // Gray label color
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 4), // Spacing between label and dropdown
-          DropdownButtonHideUnderline(
-            // Hides the default underline
-            child: DropdownButton<String>(
-              value: value,
-              isDense: true, // Reduces vertical padding
-              isExpanded: true, // Makes dropdown take available width
-              icon: Icon(
-                Icons.arrow_drop_down, // Standard dropdown icon
-                color: isLocked
-                    ? Colors.grey.shade400
-                    : Colors.grey.shade700, // Icon color based on lock state
-              ),
-              onChanged: (_isLoadingTable || isLocked)
-                  ? null
-                  : (newValue) =>
-                      onChanged(newValue!), // Disable if loading or locked
-              items: items.map<DropdownMenuItem<String>>((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: TextStyle(
-                      fontSize: 12, // Font size for items
-                      color: (_isLoadingTable || isLocked)
-                          ? Colors.grey
-                          : textPrimaryColor, // Text color based on state
-                      fontWeight: FontWeight.w500,
-                    ),
-                    overflow:
-                        TextOverflow.ellipsis, // Prevent long text overflow
-                  ),
-                );
-              }).toList(),
+          const SizedBox(height: 2), // Spacing between label and value
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 12, // Font size for value
+              color: textLockedColor, // Gray text color for value
+              fontWeight: FontWeight.w500,
             ),
+            softWrap: true, // Allow text to wrap
+            // Removed overflow: TextOverflow.ellipsis to allow full text display
           ),
         ],
       ),

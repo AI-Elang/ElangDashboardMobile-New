@@ -253,7 +253,7 @@ class _SearchState extends State<Search> {
                     decoration: const BoxDecoration(
                       color: backgroundColor,
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08,
                         alignment: Alignment.bottomRight,
@@ -297,7 +297,7 @@ class _SearchState extends State<Search> {
                                           child: const CircleAvatar(
                                             radius: 30,
                                             backgroundImage:
-                                                AssetImage('assets/100.png'),
+                                                AssetImage('assets/LOGO3.png'),
                                             backgroundColor: Colors.transparent,
                                           ),
                                         ),

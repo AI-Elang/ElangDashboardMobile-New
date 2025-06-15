@@ -195,8 +195,8 @@ class _FSState extends State<FilteringSite> {
                       color:
                           backgroundColor, // Ensure background color is set here too
                       image: DecorationImage(
-                        image:
-                            AssetImage('assets/LOGO.png'), // Keep existing code
+                        image: AssetImage(
+                            'assets/LOGO3.png'), // Keep existing code
                         fit: BoxFit.cover,
                         opacity: 0.08,
                         alignment: Alignment.bottomRight,
@@ -241,8 +241,8 @@ class _FSState extends State<FilteringSite> {
                                             ),
                                             child: const CircleAvatar(
                                               radius: 30,
-                                              backgroundImage:
-                                                  AssetImage('assets/100.png'),
+                                              backgroundImage: AssetImage(
+                                                  'assets/LOGO3.png'),
                                               backgroundColor:
                                                   Colors.transparent,
                                             ),
@@ -613,41 +613,40 @@ class _FSState extends State<FilteringSite> {
     );
   }
 
-  // Helper method to build filter items (Styled like pt.dart filter items - read-only look)
+  // Helper method to build filter items
   Widget _buildFilterItem(String label, String value) {
-    // Define colors locally or use theme
-    // const textPrimaryColor = Color(0xFF2D3142); // No longer needed for value
-    const textSecondaryColor = Color(0xFF8D8D92); // Use for value text
+    // Define colors locally or pass them if needed
+    const textLockedColor = Color(0xFF8D8D92); // Medium gray for locked text
+    const labelColor = Color(0xFF8D8D92); // Medium gray for label
 
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8), // Match pt.dart radius
-        border: Border.all(color: Colors.grey.shade300), // Match pt.dart border
-        color: Colors.white, // Match pt.dart background
+        color: Colors.white, // Background for filter item
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300), // Subtle border
       ),
-      padding: const EdgeInsets.symmetric(
-          horizontal: 12, vertical: 8), // Match pt.dart padding
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label, // Label without colon
-            style: TextStyle(
-              fontSize: 10, // Match pt.dart label style
-              color: Colors.grey.shade600, // Match pt.dart label color
+            label,
+            style: const TextStyle(
+              fontSize: 10,
+              color: labelColor, // Gray label color
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 4), // Match pt.dart spacing
+          const SizedBox(height: 2), // Spacing between label and value
           Text(
             value,
             style: const TextStyle(
-              fontSize: 12, // Match pt.dart value style
+              fontSize: 12, // Font size for value
+              color: textLockedColor, // Gray text color for value
               fontWeight: FontWeight.w500,
-              color: textSecondaryColor, // Use grey color for read-only look
             ),
-            overflow: TextOverflow.ellipsis, // Prevent overflow
-            maxLines: 1, // Ensure single line like pt.dart
+            softWrap: true, // Allow text to wrap
+            // Removed overflow: TextOverflow.ellipsis to allow full text display
           ),
         ],
       ),

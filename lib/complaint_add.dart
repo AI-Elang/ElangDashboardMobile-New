@@ -415,7 +415,7 @@ class _NewComplaintState extends State<NewComplaint> {
                       color: backgroundColor, // Use background color
                       // Keep background image consistent with complain.dart
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08, // Adjusted opacity
                         alignment: Alignment.bottomRight,
@@ -453,7 +453,7 @@ class _NewComplaintState extends State<NewComplaint> {
                                     child: const CircleAvatar(
                                       radius: 30, // Adjusted size
                                       backgroundImage:
-                                          AssetImage('assets/100.png'),
+                                          AssetImage('assets/LOGO3.png'),
                                       backgroundColor: Colors.transparent,
                                     ),
                                   ),

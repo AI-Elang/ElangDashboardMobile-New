@@ -130,7 +130,7 @@ class _SwitchDseState extends State<SwitchDse> {
                     decoration: const BoxDecoration(
                       color: backgroundColor,
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08,
                         alignment: Alignment.bottomRight,
@@ -174,7 +174,7 @@ class _SwitchDseState extends State<SwitchDse> {
                                           child: const CircleAvatar(
                                             radius: 30,
                                             backgroundImage:
-                                                AssetImage('assets/100.png'),
+                                                AssetImage('assets/LOGO3.png'),
                                             backgroundColor: Colors.transparent,
                                           ),
                                         ),
@@ -251,7 +251,7 @@ class _SwitchDseState extends State<SwitchDse> {
                                     const Divider(height: 1),
                                     const SizedBox(height: 12),
 
-// Filters section with collapsible functionality (like pt.dart)
+                                    // Filters section with collapsible functionality
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -606,7 +606,8 @@ class _SwitchDseState extends State<SwitchDse> {
               color: textLockedColor, // Gray text color for value
               fontWeight: FontWeight.w500,
             ),
-            overflow: TextOverflow.ellipsis, // Prevent long text overflow
+            softWrap: true, // Allow text to wrap
+            // Removed overflow: TextOverflow.ellipsis to allow full text display
           ),
         ],
       ),

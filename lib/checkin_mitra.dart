@@ -35,6 +35,8 @@ class _CheckinMitraState extends State<CheckinMitra> {
   File? _imageFile;
   Timer? _clearDataTimer;
   bool _isSending = false;
+  final TextEditingController _notesController =
+      TextEditingController(); // New controller
 
   // GPS related state
   double? _lockedLatitude;
@@ -43,10 +45,18 @@ class _CheckinMitraState extends State<CheckinMitra> {
   int _gpsInitialFetchAttempts = 0;
   bool _hasGpsAccess = false; // To track if GPS access was successful initially
 
+  // Check if form is valid
+  bool get _isFormValid {
+    return _imageFile != null && _notesController.text.trim().isNotEmpty;
+  }
+
   @override
   void initState() {
     super.initState();
     _checkRoleAndInitialize();
+    _notesController.addListener(() {
+      setState(() {});
+    });
   }
 
   Future<void> _checkRoleAndInitialize() async {
@@ -90,6 +100,7 @@ class _CheckinMitraState extends State<CheckinMitra> {
   @override
   void dispose() {
     _clearDataTimer?.cancel(); // Cancel timer when the page is disposed
+    _notesController.dispose(); // Dispose the new controller
     super.dispose();
   }
 
@@ -99,7 +110,9 @@ class _CheckinMitraState extends State<CheckinMitra> {
       if (mounted) {
         _clearImage(showSnackbar: true);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Image cleared due to inactivity.')),
+          const SnackBar(
+              content: Text(
+                  'Image and notes cleared due to inactivity.')), // Updated message
         );
       }
     });
@@ -284,12 +297,13 @@ class _CheckinMitraState extends State<CheckinMitra> {
   void _clearImage({bool showSnackbar = false}) {
     setState(() {
       _imageFile = null;
-      _formKey.currentState?.reset();
+      _notesController.clear(); // Clear the notes text field
     });
     _clearDataTimer?.cancel();
     if (showSnackbar && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Image cleared.')),
+        const SnackBar(
+            content: Text('Image and notes cleared.')), // Updated message
       );
     }
     _startClearDataTimer(); // Restart timer after clearing
@@ -297,6 +311,22 @@ class _CheckinMitraState extends State<CheckinMitra> {
 
   Future<void> _sendCheckinData() async {
     _clearDataTimer?.cancel();
+
+    // Check form validation first
+    if (!_isFormValid) {
+      List<String> missingFields = [];
+      if (_imageFile == null) missingFields.add('Image');
+      if (_notesController.text.trim().isEmpty) missingFields.add('Notes');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${missingFields.join(' dan ')} belum terisi.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      _startClearDataTimer();
+      return;
+    }
 
     if (_isFetchingInitialLocation) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -340,6 +370,7 @@ class _CheckinMitraState extends State<CheckinMitra> {
     request.fields['partner_name'] = widget.partnerName;
     request.fields['latitude_checkin'] = _lockedLatitude.toString();
     request.fields['longitude_checkin'] = _lockedLongitude.toString();
+    request.fields['description'] = _notesController.text;
 
     request.files.add(
       await http.MultipartFile.fromPath('image', _imageFile!.path),
@@ -371,7 +402,6 @@ class _CheckinMitraState extends State<CheckinMitra> {
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
                     _clearImage(); // Clear image after successful submission
-                    // Go back from CheckinMitra page and return true to indicate success
                     Navigator.of(context).pop(true);
                   },
                 ),
@@ -442,7 +472,7 @@ class _CheckinMitraState extends State<CheckinMitra> {
     final role = authProvider.role;
     final territory = authProvider.territory;
 
-    // Define color scheme - matching complain_add.dart style
+    // Define color scheme - matching complain_add.dart style (from checkin_mitra.dart)
     const primaryColor = Color(0xFF6A62B7); // Softer purple
     const accentColor = Color(0xFFEE92C2); // Soft pink
     const backgroundColor = Color(0xFFF8F9FA); // Off-white background
@@ -452,9 +482,6 @@ class _CheckinMitraState extends State<CheckinMitra> {
 
     // If role check is pending or denied, show minimal UI or loading
     if (![1, 2, 3, 4, 5].contains(role) && !_isFetchingInitialLocation) {
-      // Updated role check
-      // This case might be hit if role check fails after initial build
-      // but before dialog fully pops. A simple placeholder.
       return const Scaffold(body: Center(child: Text("Verifying access...")));
     }
 
@@ -523,7 +550,7 @@ class _CheckinMitraState extends State<CheckinMitra> {
                         topRight: Radius.circular(10), // Optional
                       ),
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08, // Adjusted opacity
                         alignment: Alignment.bottomRight,
@@ -558,7 +585,7 @@ class _CheckinMitraState extends State<CheckinMitra> {
                                     child: const CircleAvatar(
                                       radius: 30, // Adjusted size
                                       backgroundImage:
-                                          AssetImage('assets/100.png'),
+                                          AssetImage('assets/LOGO3.png'),
                                       backgroundColor: Colors.transparent,
                                     ),
                                   ),
@@ -624,12 +651,16 @@ class _CheckinMitraState extends State<CheckinMitra> {
                             ),
                           ),
                         ),
-                        // const SizedBox(height: 10), // Spacing adjusted by card margins
 
                         Expanded(
                           child: SingleChildScrollView(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 8.0),
+                            padding: EdgeInsets.only(
+                              left: 16.0,
+                              right: 16.0,
+                              top: 8.0, // Adjusted top padding
+                              bottom:
+                                  MediaQuery.of(context).viewInsets.bottom + 20,
+                            ),
                             child: Form(
                               key: _formKey,
                               onChanged:
@@ -745,11 +776,21 @@ class _CheckinMitraState extends State<CheckinMitra> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          const Text('Check-in Image',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: textPrimaryColor)),
+                                          const Row(
+                                            children: [
+                                              Text('Check-in Image',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                              Text(' *',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.red)),
+                                            ],
+                                          ),
                                           const SizedBox(height: 12),
                                           Center(
                                             child: _imageFile == null
@@ -821,6 +862,85 @@ class _CheckinMitraState extends State<CheckinMitra> {
                                       ),
                                     ),
                                   ),
+                                  const SizedBox(height: 12),
+
+                                  // Notes Text Field Card
+                                  Card(
+                                    elevation: 1,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    color: cardColor,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Row(
+                                            children: [
+                                              Text("Notes",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                              Text(' *',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.red)),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 12),
+                                          TextFormField(
+                                            controller: _notesController,
+                                            decoration: InputDecoration(
+                                              hintText:
+                                                  'Enter any notes here...',
+                                              hintStyle: TextStyle(
+                                                  color: Colors.grey.shade400,
+                                                  fontSize: 14),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                    color:
+                                                        Colors.grey.shade300),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                    color:
+                                                        Colors.grey.shade300),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                    color: primaryColor
+                                                        .withOpacity(0.7),
+                                                    width: 1.5),
+                                              ),
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 10),
+                                            ),
+                                            maxLines: 3,
+                                            style: const TextStyle(
+                                                color: textPrimaryColor,
+                                                fontSize: 14),
+                                            onChanged: (_) =>
+                                                _startClearDataTimer(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                   const SizedBox(height: 20),
 
                                   // Send Button
@@ -830,8 +950,9 @@ class _CheckinMitraState extends State<CheckinMitra> {
                                             ? null
                                             : _sendCheckinData,
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          primaryColor, // Use primary color
+                                      backgroundColor: _isFormValid
+                                          ? primaryColor // Use primary color
+                                          : Colors.grey, // Disabled color
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 15),
                                       shape: RoundedRectangleBorder(
@@ -854,6 +975,7 @@ class _CheckinMitraState extends State<CheckinMitra> {
                                         : const Text('Submit Check-in'),
                                   ),
                                   const SizedBox(height: 8),
+
                                   // Clear Button
                                   Center(
                                     child: TextButton(

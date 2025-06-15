@@ -194,7 +194,7 @@ class _KecamatanSiteState extends State<KecamatanSite> {
                     decoration: const BoxDecoration(
                       color: backgroundColor,
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08,
                         alignment: Alignment.bottomRight,
@@ -234,7 +234,7 @@ class _KecamatanSiteState extends State<KecamatanSite> {
                                         child: const CircleAvatar(
                                           radius: 30, // Adjusted size
                                           backgroundImage:
-                                              AssetImage('assets/100.png'),
+                                              AssetImage('assets/LOGO3.png'),
                                           backgroundColor: Colors.transparent,
                                         ),
                                       ),
@@ -676,7 +676,8 @@ class _KecamatanSiteState extends State<KecamatanSite> {
               color: textLockedColor, // Gray text color for value
               fontWeight: FontWeight.w500,
             ),
-            overflow: TextOverflow.ellipsis, // Prevent long text overflow
+            softWrap: true, // Allow text to wrap
+            // Removed overflow: TextOverflow.ellipsis to allow full text display
           ),
         ],
       ),

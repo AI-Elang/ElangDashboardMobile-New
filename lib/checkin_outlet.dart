@@ -45,10 +45,18 @@ class _CheckinOutletState extends State<CheckinOutlet> {
   int _gpsInitialFetchAttempts = 0;
   bool _hasGpsAccess = false; // To track if GPS access was successful initially
 
+  // Check if form is valid
+  bool get _isFormValid {
+    return _imageFile != null && _notesController.text.trim().isNotEmpty;
+  }
+
   @override
   void initState() {
     super.initState();
     _checkRoleAndInitialize();
+    _notesController.addListener(() {
+      setState(() {});
+    });
   }
 
   Future<void> _checkRoleAndInitialize() async {
@@ -304,6 +312,22 @@ class _CheckinOutletState extends State<CheckinOutlet> {
   Future<void> _sendCheckinData() async {
     _clearDataTimer?.cancel();
 
+    // Check form validation first
+    if (!_isFormValid) {
+      List<String> missingFields = [];
+      if (_imageFile == null) missingFields.add('Image');
+      if (_notesController.text.trim().isEmpty) missingFields.add('Notes');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${missingFields.join(' dan ')} belum terisi.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      _startClearDataTimer();
+      return;
+    }
+
     if (_isFetchingInitialLocation) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please wait, fetching location...')),
@@ -520,7 +544,7 @@ class _CheckinOutletState extends State<CheckinOutlet> {
                 decoration: const BoxDecoration(
                   color: backgroundColor, // Use background color
                   image: DecorationImage(
-                    image: AssetImage('assets/LOGO.png'),
+                    image: AssetImage('assets/LOGO3.png'),
                     fit: BoxFit.cover,
                     opacity: 0.08, // Adjusted opacity
                     alignment: Alignment.bottomRight,
@@ -554,7 +578,8 @@ class _CheckinOutletState extends State<CheckinOutlet> {
                                 ),
                                 child: const CircleAvatar(
                                   radius: 30, // Adjusted size
-                                  backgroundImage: AssetImage('assets/100.png'),
+                                  backgroundImage:
+                                      AssetImage('assets/LOGO3.png'),
                                   backgroundColor: Colors.transparent,
                                 ),
                               ),
@@ -736,11 +761,19 @@ class _CheckinOutletState extends State<CheckinOutlet> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text('Check-in Image',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                              color: textPrimaryColor)),
+                                      const Row(
+                                        children: [
+                                          Text('Check-in Image',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500)),
+                                          Text(' *',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.red)),
+                                        ],
+                                      ),
                                       const SizedBox(height: 12),
                                       Center(
                                         child: _imageFile == null
@@ -822,11 +855,19 @@ class _CheckinOutletState extends State<CheckinOutlet> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text("Notes",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                              color: textPrimaryColor)),
+                                      const Row(
+                                        children: [
+                                          Text("Notes",
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500)),
+                                          Text(' *',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.red)),
+                                        ],
+                                      ),
                                       const SizedBox(height: 12),
                                       TextFormField(
                                         controller: _notesController,
@@ -881,8 +922,9 @@ class _CheckinOutletState extends State<CheckinOutlet> {
                                         ? null
                                         : _sendCheckinData,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      primaryColor, // Use primary color
+                                  backgroundColor: _isFormValid
+                                      ? primaryColor // Use primary color
+                                      : Colors.grey, // Disabled color
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 15),
                                   shape: RoundedRectangleBorder(

@@ -68,8 +68,6 @@ class _FMState extends State<FilteringMitra> with WidgetsBindingObserver {
     {'display': 'Desember', 'value': '12'},
   ];
 
-  final bool _isDropdownsDisabled =
-      false; // Renamed for clarity, indicates if dropdowns should be disabled (e.g., during load)
   bool _isLoadingPartners =
       true; // State variable to track loading of the partner list
   bool _isFiltersCollapsed = true; // Add state for collapsible filters
@@ -354,7 +352,7 @@ class _FMState extends State<FilteringMitra> with WidgetsBindingObserver {
                     decoration: const BoxDecoration(
                       color: backgroundColor,
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08,
                         alignment: Alignment.bottomRight,
@@ -398,8 +396,8 @@ class _FMState extends State<FilteringMitra> with WidgetsBindingObserver {
                                             ),
                                             child: const CircleAvatar(
                                               radius: 30,
-                                              backgroundImage:
-                                                  AssetImage('assets/100.png'),
+                                              backgroundImage: AssetImage(
+                                                  'assets/LOGO3.png'),
                                               backgroundColor:
                                                   Colors.transparent,
                                             ),
@@ -555,11 +553,6 @@ class _FMState extends State<FilteringMitra> with WidgetsBindingObserver {
                                                                 _buildFilterItem(
                                                               "Circle",
                                                               _selectedDropdown1,
-                                                              true, // Always locked
-                                                              (value) {}, // No action
-                                                              [
-                                                                _selectedDropdown1
-                                                              ],
                                                             ),
                                                           ),
                                                           const SizedBox(
@@ -571,12 +564,6 @@ class _FMState extends State<FilteringMitra> with WidgetsBindingObserver {
                                                               "Region",
                                                               widget
                                                                   .selectedRegion,
-                                                              true, // Always locked
-                                                              (value) {}, // No action
-                                                              [
-                                                                widget
-                                                                    .selectedRegion
-                                                              ],
                                                             ),
                                                           ),
                                                         ],
@@ -592,12 +579,6 @@ class _FMState extends State<FilteringMitra> with WidgetsBindingObserver {
                                                               "Area",
                                                               widget
                                                                   .selectedArea,
-                                                              true, // Always locked
-                                                              (value) {}, // No action
-                                                              [
-                                                                widget
-                                                                    .selectedArea
-                                                              ],
                                                             ),
                                                           ),
                                                           const SizedBox(
@@ -609,12 +590,6 @@ class _FMState extends State<FilteringMitra> with WidgetsBindingObserver {
                                                               "Branch",
                                                               widget
                                                                   .selectedBranch,
-                                                              true, // Always locked
-                                                              (value) {}, // No action
-                                                              [
-                                                                widget
-                                                                    .selectedBranch
-                                                              ],
                                                             ),
                                                           ),
                                                         ],
@@ -1241,16 +1216,16 @@ class _FMState extends State<FilteringMitra> with WidgetsBindingObserver {
     );
   }
 
-// Helper method to build filter items
-  Widget _buildFilterItem(String label, String value, bool isLocked,
-      Function(String) onChanged, List<String> items) {
+  // Helper method to build filter items
+  Widget _buildFilterItem(String label, String value) {
     // Define colors locally or pass them if needed
-    const textPrimaryColor = Color(0xFF2D3142);
+    const textLockedColor = Color(0xFF8D8D92); // Medium gray for locked text
+    const labelColor = Color(0xFF8D8D92); // Medium gray for label
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white, // Background for dropdown area
+        color: Colors.white, // Background for filter item
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey.shade300), // Subtle border
       ),
@@ -1259,49 +1234,22 @@ class _FMState extends State<FilteringMitra> with WidgetsBindingObserver {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 10,
-              color: Colors.grey.shade600, // Lighter color for label
+              color: labelColor, // Gray label color
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 4), // Spacing between label and dropdown
-          DropdownButtonHideUnderline(
-            // Hides the default underline
-            child: DropdownButton<String>(
-              value: value,
-              isDense: true, // Reduces vertical padding
-              isExpanded: true, // Makes dropdown take available width
-              icon: Icon(
-                Icons.arrow_drop_down, // Standard dropdown icon
-                color: isLocked || _isDropdownsDisabled // Check disabled state
-                    ? Colors.grey.shade400
-                    : Colors.grey.shade700, // Icon color based on lock state
-              ),
-              onChanged:
-                  (_isDropdownsDisabled || isLocked) // Use combined check
-                      ? null
-                      : (newValue) =>
-                          onChanged(newValue!), // Disable if loading or locked
-              items: items.map<DropdownMenuItem<String>>((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: TextStyle(
-                      fontSize: 12, // Font size for items
-                      color: (_isDropdownsDisabled ||
-                              isLocked) // Use combined check
-                          ? Colors.grey
-                          : textPrimaryColor, // Text color based on state
-                      fontWeight: FontWeight.w500,
-                    ),
-                    overflow:
-                        TextOverflow.ellipsis, // Prevent long text overflow
-                  ),
-                );
-              }).toList(),
+          const SizedBox(height: 2), // Spacing between label and value
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 12, // Font size for value
+              color: textLockedColor, // Gray text color for value
+              fontWeight: FontWeight.w500,
             ),
+            softWrap: true, // Allow text to wrap
+            // Removed overflow: TextOverflow.ellipsis to allow full text display
           ),
         ],
       ),

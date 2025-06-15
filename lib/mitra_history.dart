@@ -205,7 +205,7 @@ class _MitraHistoryState extends State<MitraHistory> {
                     decoration: const BoxDecoration(
                       color: backgroundColor, // Use defined background color
                       image: DecorationImage(
-                        image: AssetImage('assets/LOGO.png'),
+                        image: AssetImage('assets/LOGO3.png'),
                         fit: BoxFit.cover,
                         opacity: 0.08, // Adjusted opacity
                         alignment: Alignment.bottomRight,
@@ -432,10 +432,8 @@ class _MitraHistoryState extends State<MitraHistory> {
                                                                         MaterialPageRoute(
                                                                           builder: (context) =>
                                                                               FotoMitraHistory(
-                                                                            imageUrl:
-                                                                                drd['image'],
-                                                                            title:
-                                                                                drd['username'] ?? 'Image',
+                                                                            checkInId:
+                                                                                drd['id'],
                                                                           ),
                                                                         ),
                                                                       );
